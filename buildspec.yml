@@ -16,4 +16,6 @@ phases:
     commands:
       - echo Pushing Docker image to ECR...
       - docker push 800754315556.dkr.ecr.ap-south-1.amazonaws.com/sample-node-app:latest
-      - echo Build completed successfully.
+      - echo Deploying to EC2...
+      - aws ssm send-command --instance-ids YOUR_INSTANCE_ID --document-name "AWS-RunShellScript" --parameters 'commands=["sudo docker pull 800754315556.dkr.ecr.ap-south-1.amazonaws.com/sample-node-app:latest","sudo docker stop sample-node-app || true","sudo docker rm sample-node-app || true","sudo docker run -d -p 8080:8080 --name sample-node-app 800754315556.dkr.ecr.ap-south-1.amazonaws.com/sample-node-app:latest"]' --region ap-south-1
+      - echo Deployment command sent successfully.
